@@ -2,7 +2,8 @@ module.exports = (sequelize, DataTypes) => {
     const Enviroment = sequelize.define('Enviroment', {
 		id: {
 			primaryKey: true,
-            type: DataTypes.INTEGER
+            type: DataTypes.INTEGER,
+            autoIncrement: true
         },
         name: {
             type: DataTypes.STRING
@@ -17,6 +18,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER
         },
         description: {
+            type: DataTypes.STRING
+        },
+        block: {
             type: DataTypes.STRING
         }		
     },  

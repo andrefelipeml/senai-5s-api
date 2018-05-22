@@ -20,8 +20,19 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     EnviromentTypeQuestion.associate = (models) => {
-      EnviromentTypeQuestion.belongsTo(models.EnviromentType);
-      EnviromentTypeQuestion.belongsTo(models.Question);
+      EnviromentTypeQuestion.belongsTo(models.EnviromentType, {
+        foreignKey: {
+          name: 'enviroment_types_id',
+          allowNull: false
+        }
+      });
+
+      EnviromentTypeQuestion.belongsTo(models.Question, {
+        foreignKey: {
+          name: 'questions_id',
+          allowNull: false
+        }
+      });
     }
 
     return EnviromentTypeQuestion;

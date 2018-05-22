@@ -3,7 +3,8 @@ module.exports = (sequelize, DataTypes) => {
     var EnviromentType = sequelize.define('EnviromentType', {
         id: {
 			primaryKey: true,
-            type: DataTypes.INTEGER
+            type: DataTypes.INTEGER,
+            autoIncrement: true
         },
         name: {
             type: DataTypes.STRING
@@ -17,7 +18,6 @@ module.exports = (sequelize, DataTypes) => {
             associate : function(models) { },
         },
 
-        //para não ficar com table name zuado no banco
         tableName: 'enviroment_types' 
     });
 

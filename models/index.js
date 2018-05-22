@@ -1,26 +1,27 @@
-var fs        = require("fs");
-var path      = require("path");
-var Sequelize = require("sequelize");
+const Sequelize = require('sequelize');
+const settings = require('config');
 
-var sequelize = new Sequelize('senai_5s', 'root', 'root',{
-  host: 'localhost',    
-  dialect: 'mysql',
-  define: {
-      timestamps: false
-  }
+var fs = require("fs");
+var path = require("path");
+
+const sequelize = new Sequelize(settings.database.name, settings.database.user, settings.database.password, {
+  host: settings.database.host,
+  dialect: 'postgres',
+  dialectOptions: {
+    ssl: true
+  },
+  logging: true
 });
 
 var db = {};
 
-fs
-  .readdirSync(__dirname)
-  .filter(function(file) {
-    return (file.indexOf(".") !== 0) && (file !== "index.js");
-  })
-  .forEach(function(file) {
-    var model = sequelize.import(path.join(__dirname, file));
-    db[model.name] = model;
-  });
+fs.readdirSync(__dirname).filter(function(file) {
+  return (file.indexOf(".") !== 0) && (file !== "index.js");
+})
+.forEach(function(file) {
+  var model = sequelize.import(path.join(__dirname, file));
+  db[model.name] = model;
+});
 
 Object.keys(db).forEach(function(modelName) {
   if ("associate" in db[modelName]) {

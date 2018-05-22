@@ -7,7 +7,6 @@ module.exports = class EnviromentController {
     }
 
     save(enviroment){
-        console.log('enviromenttttt' + enviroment);
         models.Enviroment.create(enviroment)    
         .then(res => {
             return this.res.json({status: 201})

@@ -51,7 +51,7 @@ module.exports = class UserController {
             return this.res.status(500);
         });
     }
-
+    
     remove(){
         models.User.destroy({
             where: {

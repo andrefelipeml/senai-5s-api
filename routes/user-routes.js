@@ -24,4 +24,7 @@ router.delete('/users/:id', function(req, res){
     new userController(req, res).remove();
 })
 
+router.post('/resetPassword', function(req, res) {
+    new userController(req, res).resetPassword();
+});
 module.exports = router;
