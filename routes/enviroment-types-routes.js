@@ -19,4 +19,8 @@ router.delete('/enviromenttypes/:id', function(req, res){
     new enviromentTypeController(req, res).remove();
 })
 
+router.delete('/associate/:id', function(req, res) {
+    new enviromentTypeController(req, res).removeAssociatedItems(req.params.id);
+})
+
 module.exports = router;

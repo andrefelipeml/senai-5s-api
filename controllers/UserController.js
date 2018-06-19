@@ -15,10 +15,14 @@ module.exports = class UserController {
 
         models.User.create(user)    
         .then(res => {
-            return this.res.json({status: 201})
+            return this.res.status(201).json({
+                type: 'success', message: 'Usuário salvo com sucesso!'
+            })
         })
-        .catch((err) => {   
-            return this.res.status(500).json({message: err});
+        .catch((error) => {   
+            return this.res.status(500).json({
+                type: 'error', message: 'Ocorreu um erro ao salvar!', errorDetails: error
+            });
         });
     }
 
@@ -33,10 +37,14 @@ module.exports = class UserController {
             where: { id: user.id }
         })
         .then(res => {
-            return this.res.json({status: 201})
+            return this.res.status(200).json({
+                type: 'success', message: 'Usuário salvo com sucesso'
+            })
         })
-        .catch((err) => {
-            return this.res.status(500).json({message: err});
+        .catch((error) => {
+            return this.res.status(500).json({
+                type: 'error', message: err, errorDetails: error
+            });
         });
     }
     
@@ -48,7 +56,7 @@ module.exports = class UserController {
             return this.res.json(users);
         })
         .catch((error) => {
-            return this.res.status(500);
+            return this.res.status(500).json({errorDetails: error});
         });
     }
     
@@ -59,13 +67,19 @@ module.exports = class UserController {
             }
         })
         .then((deletedRecord) => {
-            if(deletedRecord === 1)
-                return this.res.json({status: 200, message: "Removido com sucesso!"});         
+            if(deletedRecord)
+                return this.res.status(200).json({
+                    type: 'success',  message: 'Removido com sucesso!'
+                });         
             else
-                return this.res.json({status: 404, message: "Registro não encontrado!"}); 
+                return this.res.status(404).json({
+                    type:'error', message: 'Registro não encontrado!'
+                }); 
         })
         .catch((error) => {
-            return this.res.json({status: 500, message: "Erro de servidor"}); 
+            return this.res.status(500).json({
+                type:'error', message: "Erro de servidor", errorDetails: error
+            }); 
         })
     }
 

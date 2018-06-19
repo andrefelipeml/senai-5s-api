@@ -9,10 +9,14 @@ module.exports = class EnviromentTypeController {
     save(enviromentType){
         models.EnviromentType.create(enviromentType)    
         .then(res => {
-            return this.res.json({status: 201})
+            return this.res.status(201).json({
+                type: 'success', message: 'Tipo de ambiente salvo com sucesso!'
+            })
         })
-        .catch((err) => {   
-            return this.res.status(500).json({message: err});
+        .catch((error) => {   
+            return this.res.status(500).json({
+                message: 'Ocorreu um erro ao tentar salvar', errorDetails: error
+            });
         });
     }
 
@@ -22,7 +26,7 @@ module.exports = class EnviromentTypeController {
             return this.res.json(enviromentTypes);
         })
         .catch((error) => {
-            return this.res.status(500);
+            return this.res.status(500).json({errorDetails: error});
         });
     }
 
@@ -32,10 +36,14 @@ module.exports = class EnviromentTypeController {
             where: { id: enviromentType.id }
         })
         .then(res => {
-            return this.res.json({status: 201})
+            return this.res.status(200).json({
+                type: 'success', message: 'Tipo de ambiente salvo com sucesso!'
+            })
         })
-        .catch((err) => {
-            return this.res.status(500).json({message: err});
+        .catch((error) => {
+            return this.res.status(500).json({
+                type: 'error', message: 'Ocorreu um erro ao tentar atualizar!', errorDetails: error
+            });
         });
     }
 
@@ -46,13 +54,35 @@ module.exports = class EnviromentTypeController {
             }
         })
         .then((deletedRecord) => {
-            if(deletedRecord === 1)
-                return this.res.json({status: 200, message: "Removido com sucesso!"});         
+            if(deletedRecord)
+                return this.res.status(200).json({
+                    type: 'success', message: "Removido com sucesso!"
+                });         
             else
-                return this.res.json({status: 404, message: "Registro não encontrado!"}); 
+                return this.res.status(404).json({
+                    type: 'error', message: "Registro não encontrado!"
+                }); 
         })
         .catch((error) => {
-            return this.res.json({status: 500, message: "Erro de servidor"}); 
+            return this.res.status(500).json({
+                type: 'warning',
+                message: "Não é possível remover um tipo de ambiente que está vinculado a um ambiente",
+                errorDetails: error
+            }); 
+        })
+    }
+
+    removeAssociatedItems(enviromentTypeId) {
+        models.EnviromentTypeQuestion.destroy({
+            where: {    
+                enviroment_types_id: enviromentTypeId 
+            }
+        })
+        .then(res => {
+            return this.res.status(200).json({type: 'success', msg: 'Tipos de ambientes foram removidos!'});
+        })
+        .catch((error) =>{
+            return this.res.status(500).json({errorDetails: error})
         })
     }
 }

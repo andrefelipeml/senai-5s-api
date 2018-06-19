@@ -9,10 +9,12 @@ module.exports = class Question {
     save(question) {
         models.Question.create(question)
         .then(res => {
-            return this.res.json({status: 201, questions_id: res.id, enviroment_types_id: question.enviroment_types_id})
+            return this.res.status(201).json({
+                type:'success', message: 'Pergunta salva com sucesso', questions_id: res.id, enviroment_types_id: question.enviroment_types_id
+            })
         })
-        .catch((err) => {   
-            return this.res.status(500);       
+        .catch((error) => {   
+            return this.res.status(500).json({errorDetails: error});       
         });
     }
 
@@ -22,10 +24,9 @@ module.exports = class Question {
             idsToInsert.push({questions_id: relatedIds.questionId, enviroment_types_id: envtypeId})
         });
         models.EnviromentTypeQuestion.bulkCreate(idsToInsert)
-        .then(res => {
-        })
-        .catch((err) => {   
-            return this.res.status(500);       
+        .then(res => {})
+        .catch((error) => {   
+            return this.res.status(500).json({errorDetails: error});       
         });
     }
 
@@ -36,20 +37,20 @@ module.exports = class Question {
             }
         })
         .then(res => {
-            return this.res.json({status: 201})
+            return this.res.status(200).json({type: 'success', msg: 'Tipos de ambientes que estavam vinculados, foram removidos.'});
         })
-        .catch((err) =>{
-            return this.res.json({status: 500})
+        .catch((error) =>{
+            return this.res.status(500).json({errorDetails: error})
         })
     }
 
     load() {
         models.Question.findAll({})
         .then(questions => {
-            return this.res.json(questions);
+            return this.res.status(200).json(questions);
         })
         .catch((error) => {
-            return this.res.status(500);
+            return this.res.status(500).json({errorDetails: error});
         });
     }
 
@@ -64,10 +65,10 @@ module.exports = class Question {
             }
         })
         .then(questions => {
-            return this.res.json(questions);
+            return this.res.status(200).json(questions);
         })
         .catch((error) => {
-            return this.res.status(500);
+            return this.res.status(500).json({errorDetails: error});
         })
     }
     
@@ -77,10 +78,14 @@ module.exports = class Question {
             where: { id: question.id }
         })
         .then(res => {
-            return this.res.json({status: 201})
+            return this.res.status(200).json({
+                type: 'success', message: 'Pergunta salva com sucesso!'
+            })
         })
-        .catch((err) => {
-            return this.res.status(500).json({message: err});
+        .catch((error) => {
+            return this.res.status(500).json({
+                type: 'error', message: 'Ocorreu um erro ao tentar atualizar', errorDetails: error
+            });
         });
     }
 
@@ -91,13 +96,17 @@ module.exports = class Question {
             }
         })
         .then((deletedRecord) => {
-            if(deletedRecord === 1)
-                return this.res.json({status: 200, message: "Removido com sucesso!"});         
+            if(deletedRecord)
+                return this.res.status(200).json({
+                    type: 'success', message: "Pergunta removida com sucesso!"
+                });         
             else
-                return this.res.json({status: 404, message: "Registro não encontrado!"}); 
+                return this.res.status(404).json({
+                    type: 'error', message: "Registro não encontrado!"
+                }); 
         })
         .catch((error) => {
-            return this.res.json({status: 500, message: "Erro de servidor"}); 
+            return this.res.status(500).json({type: 'error', message: "Erro de servidor", errorDetails: error}); 
         })
     }
 }

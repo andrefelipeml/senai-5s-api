@@ -13,7 +13,7 @@ router.put('/enviroments/:id', function(req, res){
 
 router.get('/enviroments', function(req, res){
     new enviromentController(req, res).load();
-})  
+})
 
 router.delete('/enviroments/:id', function(req, res){
     new enviromentController(req, res).remove();

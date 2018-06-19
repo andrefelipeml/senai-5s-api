@@ -9,10 +9,14 @@ module.exports = class EnviromentController {
     save(enviroment){
         models.Enviroment.create(enviroment)    
         .then(res => {
-            return this.res.json({status: 201})
+            return this.res.status(201).json({
+                type: 'success', message: 'Ambiente salvo com sucesso!'
+            })
         })
-        .catch((err) => {       
-            return this.res.status(500).json({message: err});
+        .catch((error) => {       
+            return this.res.status(500).json({
+                type: 'error', message: 'Ocorreu um erro ao tentar salvar!', errorDetails: error
+            });
         });
     }
 
@@ -24,7 +28,7 @@ module.exports = class EnviromentController {
             return this.res.json(enviroments);  
         })
         .catch((error) => {
-            return this.res.status(500);
+            return this.res.status(500).json({errorDetails: error});
         });
     }
 
@@ -34,10 +38,14 @@ module.exports = class EnviromentController {
             where: { id: enviroment.id }
         })
         .then(res => {
-            return this.res.json({status: 201})
+            return this.res.status(201).json({
+                type: 'success', message: 'Ambiente salvo com sucesso!'
+            })
         })
-        .catch((err) => {
-            return this.res.status(500).json({message: err});
+        .catch((error) => {
+            return this.res.status(500).json({
+                type: 'error', message: 'Ocorreu um erro ao tentar salvar!', errorDetails: error
+            });
         });
     }
 
@@ -48,13 +56,19 @@ module.exports = class EnviromentController {
             }
         })
         .then((deletedRecord) => {
-            if(deletedRecord === 1)
-                return this.res.json({status: 200, message: "Removido com sucesso!"});         
+            if(deletedRecord)
+                return this.res.status(200).json({
+                    type: 'success', status: 200, message: "Removido com sucesso!"
+                });         
             else
-                return this.res.json({status: 404, message: "Registro não encontrado!"}); 
+                return this.res.json({
+                    type: 'error', status: 404, message: "Registro não encontrado!"
+                }); 
         })
         .catch((error) => {
-            return this.res.json({status: 500, message: "Erro de servidor"}); 
+            return this.res.json({
+                type: 'error', status: 500, message: "Erro de servidor", errorDetails: error
+            }); 
         })
     }
 }

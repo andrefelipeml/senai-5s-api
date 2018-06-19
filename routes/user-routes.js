@@ -8,6 +8,11 @@ router.post('/authenticate', function(req, res) {
     new authController(req, res).authenticate();
 });
 
+router.post('/validateFirstAccess', function(req, res) {
+    new authController(req, res).validateFirstAccess();
+});
+
+
 router.post('/users', function(req, res) {
     new userController(req, res).save(req.body);
 });

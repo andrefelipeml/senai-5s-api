@@ -10,6 +10,10 @@ router.delete('/associate/:id', function(req, res) {
     new questionController(req, res).removeAssociatedItems(req.params.id);
 })
 
+router.put('/associate', function(req, res){
+    new questionController(req, res).updateAssociateTable(req.body);
+})
+
 router.post('/questions', function(req, res) {
     new questionController(req, res).save(req.body);
 });
