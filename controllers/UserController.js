@@ -17,7 +17,7 @@ module.exports = class UserController {
         models.User.create(user)    
         .then(res => {
             return this.res.status(201).json({
-                type: 'success', message: 'Usuário salvo com sucesso!'
+                user_id: res.id
             })
         })
         .catch((error) => {   
@@ -84,6 +84,41 @@ module.exports = class UserController {
             }); 
         })
     }
+
+    saveInAssociateTable(relatedIds) {
+
+        var userType = this.req.body.userType;
+        var userId = this.req.body.userId;
+        
+        var idsToInsert = [];
+
+        models.UserType.create(userType, userId)    
+        .then(res => {
+            return this.res.status(201).json({
+                type: 'success', message: 'ok'
+            })
+        })
+        .catch((error) => {       
+            return this.res.status(500).json({
+                type: 'error', message: 'Ocorreu um erro ao tentar salvar!', errorDetails: error
+            });
+        });
+    }
+
+    removeAssociatedItems(questionId) {
+        models.EnviromentTypeQuestion.destroy({
+            where: {
+                questions_id: questionId
+            }
+        })
+        .then(res => {
+            return this.res.status(200).json({type: 'success', msg: 'Tipos de ambientes que estavam vinculados, foram removidos.'});
+        })
+        .catch((error) =>{
+            return this.res.status(500).json({errorDetails: error})
+        })
+    }
+
 
     generateHash(password){
         var salt = bcrypt.genSaltSync(10);
