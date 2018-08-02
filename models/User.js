@@ -18,7 +18,7 @@
             type: DataTypes.STRING
         },
         profile: {
-            type: DataTypes.STRING
+            type: DataTypes.INTEGER
         },
     },  
     {

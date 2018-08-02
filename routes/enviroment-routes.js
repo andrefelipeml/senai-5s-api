@@ -19,4 +19,8 @@ router.delete('/enviroments/:id', function(req, res){
     new enviromentController(req, res).remove();
 })
 
+router.get('/enviroments/:unitId', function(req, res) {
+    new enviromentController(req, res).loadEnviromentsByUnit();
+})
+
 module.exports = router;

@@ -71,4 +71,20 @@ module.exports = class EnviromentController {
             }); 
         })
     }
+
+    loadEnviromentsByUnit() {
+        models.Enviroment.findAll({
+            where: {
+                units_id: this.req.params.unitId
+            }
+        })
+        .then(enviroments => {
+            return this.res.status(200).json(enviroments)
+        })
+        .catch((error) =>{
+            return this.res.status(500).json({
+                type: 'error', message: "Erro de servidor", errorDetails: error
+            })
+        })
+    }
 }

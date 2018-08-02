@@ -21,9 +21,8 @@ module.exports = class AuthController {
             });
 
             if(data){
-               var isAuthenticated =  bcrypt.compareSync(password, data.password);
-
-                if(isAuthenticated){
+               var isValid =  bcrypt.compareSync(password, data.password);
+                if(isValid){
                     var user = ({
                         id: data.id,
                         email: email,
@@ -32,7 +31,7 @@ module.exports = class AuthController {
                         profile: data.profile
                     })
                     var token = jwt.sign(user, process.env.SECRET_KEY, {
-                        expiresIn: 400000
+                        expiresIn: '12h'
                     });
                     
                     this._res.json({
@@ -40,11 +39,11 @@ module.exports = class AuthController {
                         isAuth: true
                     });
                     
-                }else
-                    this._res.status(401).send("Dados incorretos");
+                } else
+                    this._res.status(401).send("A senha está incorreta!");
                 
             } else 
-                this._res.status(401).send("Usuário não encontrado");
+                this._res.status(401).send("Usuário não encontrado!");
 			
         } catch(err) {
             this._res.status(500).send("Ocorreu um erro ao tentar realizar o login" + err);
@@ -54,7 +53,6 @@ module.exports = class AuthController {
     async validateFirstAccess(){
         var email = this._req.body.email;
         var cbFirstAccess = this._req.body.cbFirstAccess;
-        console.log("emaaaill",email, cbFirstAccess);
 
         try {
             const data = await models.User.findOne({

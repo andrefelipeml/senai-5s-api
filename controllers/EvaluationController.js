@@ -21,7 +21,9 @@ module.exports = class EvaluationController {
     }
 
     save(evaluation){
-        models.Evaluation.create(evaluation)
+        let evaluationToSave = this.mountEvaluations(evaluation);
+        
+        models.Evaluation.bulkCreate(evaluationToSave)
         .then(res => {
             return this.res.status(201).json({
                 type: 'success', message: 'Avaliação salva com sucesso!'
@@ -32,6 +34,23 @@ module.exports = class EvaluationController {
                 type: 'error', message: 'Ocorreu um erro ao tentar salvar!', errorDetails: error
             })
         })
+    }
+
+    mountEvaluations(evaluation) {
+        let evaluationToSave = [];
+        evaluation["enviroments_id"].forEach(enviromentId => {
+            evaluationToSave.push({
+                users_id: evaluation.users_id,
+                enviroments_id: enviromentId,
+                createDate: evaluation.createDate,
+                dueDate: evaluation.dueDate,
+                title: evaluation.title,
+                status: evaluation.status,
+                description: evaluation.description
+            })
+        })
+
+        return evaluationToSave;
     }
 
     update(evaluation){
