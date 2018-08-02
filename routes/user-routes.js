@@ -8,12 +8,20 @@ router.post('/authenticate', function(req, res) {
     new authController(req, res).authenticate();
 });
 
+router.post('/authenticateApp', function(req, res) {
+    new authController(req, res).authenticateApp();
+});
+
 router.post('/validateFirstAccess', function(req, res) {
     new userController(req, res).validateFirstAccess();
 });
 
 router.post('/firstAccess', function(req, res) {
     new userController(req, res).firstAccess();
+});
+            
+router.post('/users/associate', function(req, res) {
+    new userController(req, res).saveInAssociateTable();
 });
 
 router.post('/users', function(req, res) {
