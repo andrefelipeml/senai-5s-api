@@ -105,8 +105,6 @@ module.exports = class AuthController {
                 }           
             });
 
-            console.log('data.profile: ', data.profile);
-
             if(data){
                 var isAuthenticated =  bcrypt.compareSync(password, data.password);
 
@@ -125,7 +123,8 @@ module.exports = class AuthController {
                         
                         this._res.json({
                             token: token,
-                            isAuth: true
+                            isAuth: true,
+                            profile: data.profile
                         });
                      }else {
                         this._res.status(401).send("Usuário não permitido");
