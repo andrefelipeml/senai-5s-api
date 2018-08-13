@@ -11,13 +11,12 @@ module.exports = class UserController {
     }
 
     save(user){
-        user.userName = user.email.split("@")[0];
         user.password = this.generateHash(user.password);        
 
         models.User.create(user)    
         .then(res => {
             return this.res.status(201).json({
-                user_id: res.id
+                type: 'success', message: 'Usuário salvo com sucesso!'
             })
         })
         .catch((error) => {   
@@ -112,41 +111,6 @@ module.exports = class UserController {
         })
     }
 
-    saveInAssociateTable(relatedIds) {
-
-        var userType = this.req.body.userType;
-        var userId = this.req.body.userId;
-        
-        var idsToInsert = [];
-
-        models.UserType.create(userType, userId)    
-        .then(res => {
-            return this.res.status(201).json({
-                type: 'success', message: 'ok'
-            })
-        })
-        .catch((error) => {       
-            return this.res.status(500).json({
-                type: 'error', message: 'Ocorreu um erro ao tentar salvar!', errorDetails: error
-            });
-        });
-    }
-
-    removeAssociatedItems(questionId) {
-        models.EnviromentTypeQuestion.destroy({
-            where: {
-                questions_id: questionId
-            }
-        })
-        .then(res => {
-            return this.res.status(200).json({type: 'success', msg: 'Tipos de ambientes que estavam vinculados, foram removidos.'});
-        })
-        .catch((error) =>{
-            return this.res.status(500).json({errorDetails: error})
-        })
-    }
-
-
     generateHash(password){
         var salt = bcrypt.genSaltSync(10);
         password = bcrypt.hashSync(password, salt);
@@ -200,7 +164,6 @@ module.exports = class UserController {
                     var user = ({
                         id: data.id,
                         email: email,
-                        userName: data.userName,
                         name: data.name,
                         profile: data.profile
                     })

@@ -19,10 +19,6 @@ router.post('/validateFirstAccess', function(req, res) {
 router.post('/firstAccess', function(req, res) {
     new userController(req, res).firstAccess();
 });
-            
-router.post('/users/associate', function(req, res) {
-    new userController(req, res).saveInAssociateTable();
-});
 
 router.post('/users', function(req, res) {
     new userController(req, res).save(req.body);
